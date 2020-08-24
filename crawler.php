@@ -8,6 +8,9 @@ use Symfony\Component\Panther\Client;
 $dotenv = new Dotenv();
 $dotenv->load('.env', '.env.local');
 
+$isMailSupported = $_ENV['MAILER_SUPPORT'];
+
+echo (new DateTime())->format('Y-m-d H:i:s').' execution started';
 $client = Client::createChromeClient();
 
 try {
@@ -23,13 +26,18 @@ try {
     $unclaimed = $crawler->filter('.ptsplus')->getText();
     $total = $crawler->filter('.minPts')->parents()->first()->getText();
     $result = 'Unclaimed points: '.$unclaimed.'; total points: '.$total;
-    sendEmail($result);
+    if ($isMailSupported) {
+        sendEmail($result);
+    }
     echo "OK";
 } catch (Exception $e) {
-    sendEmail($e->getMessage());
+    if ($isMailSupported) {
+        sendEmail($e->getMessage());
+    }
     echo $e->getMessage();
 } finally {
     $client->quit();
+    echo (new DateTime())->format('Y-m-d H:i:s').' execution completed';
 }
 
 function sendEmail($text)

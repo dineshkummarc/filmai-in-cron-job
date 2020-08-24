@@ -1,12 +1,12 @@
 <?php
 
-require_once "vendor/autoload.php";
+require_once __DIR__."/vendor/autoload.php";
 
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Panther\Client;
 
 $dotenv = new Dotenv();
-$dotenv->load('.env', '.env.local');
+$dotenv->load(__DIR__.'/.env', __DIR__.'/.env.local');
 
 $isMailSupported = $_ENV['MAILER_SUPPORT'];
 

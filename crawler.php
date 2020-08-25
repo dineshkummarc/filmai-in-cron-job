@@ -23,9 +23,9 @@ try {
         ]
     );
     $crawler = $client->submit($form);
-    $unclaimed = $crawler->filter('.ptsplus')->getText();
+    $client->executeScript('$(".transfer").click()');
     $total = $crawler->filter('.minPts')->parents()->first()->getText();
-    $result = 'Unclaimed points: '.$unclaimed.'; total points: '.$total;
+    $result = 'Total points in account: '.$total;
     if ($isMailSupported) {
         sendEmail($result);
     }

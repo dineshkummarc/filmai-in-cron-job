@@ -1,6 +1,6 @@
 # Getting Started
 To run this script, adjust the configuration to your needs and run `composer install`. Next, add the following crontab to your server:
-`0 15 * * * php crawler.php > logs`. This crontab executes crawler script once a day at 15:00 and saves output in `logs` file.
+`0 15 * * * php crawler.php > logs`. This crontab executes crawler script once a day at 15:00 and saves output in `logs` file. You can also add a Basic Task in Windows Scheduler.
 
 # Important
 Chrome must be installed on the server. Chrome version must match ChromeDriver version. 

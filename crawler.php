@@ -10,7 +10,7 @@ $dotenv->load(__DIR__.'/.env', __DIR__.'/.env.local');
 
 $isMailSupported = $_ENV['MAILER_SUPPORT'];
 
-echo (new DateTime())->format('Y-m-d H:i:s').' execution started';
+echo (new DateTime())->format('Y-m-d H:i:s').' execution started', PHP_EOL;
 $client = Client::createChromeClient();
 
 try {
@@ -23,21 +23,22 @@ try {
         ]
     );
     $crawler = $client->submit($form);
+    $before = $crawler->filter('.minPts')->parents()->first()->getText();
     $client->executeScript('$(".transfer").click()');
-    $total = $crawler->filter('.minPts')->parents()->first()->getText();
-    $result = 'Total points in account: '.$total;
+    $after = $crawler->filter('.minPts')->parents()->first()->getText();
+    $result = 'Total points in account before execution: '.$before.', after execution: '.$after;
     if ($isMailSupported) {
         sendEmail($result);
     }
-    echo "OK";
+    echo "OK", PHP_EOL;
 } catch (Exception $e) {
     if ($isMailSupported) {
         sendEmail($e->getMessage());
     }
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 } finally {
     $client->quit();
-    echo (new DateTime())->format('Y-m-d H:i:s').' execution completed';
+    echo (new DateTime())->format('Y-m-d H:i:s').' execution completed', PHP_EOL;
 }
 
 function sendEmail($text)

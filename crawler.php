@@ -10,10 +10,11 @@ $dotenv->load(__DIR__.'/.env', __DIR__.'/.env.local');
 
 $isMailSupported = $_ENV['MAILER_SUPPORT'];
 
-echo (new DateTime())->format('Y-m-d H:i:s').' execution started', PHP_EOL;
+$log = (new DateTime())->format('Y-m-d H:i:s').' execution started.'.PHP_EOL;
 $client = Client::createChromeClient();
 
 try {
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' sending GET request to '.$_ENV['LOGIN_URL'].PHP_EOL;
     $crawler = $client->request('GET', $_ENV['LOGIN_URL']);
     $form = $crawler->filter('.loginFrm')->form();
     $form->setValues(
@@ -22,23 +23,25 @@ try {
             'password' => $_ENV['PASSWORD'],
         ]
     );
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' submitting login form.'.PHP_EOL;
     $crawler = $client->submit($form);
     $before = $crawler->filter('.minPts')->parents()->first()->getText();
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' executing transfer pts JS (current pts: '.$before.')'.PHP_EOL;
     $client->executeScript('$(".transfer").click()');
-    $after = $crawler->filter('.minPts')->parents()->first()->getText();
-    $result = 'Total points in account before execution: '.$before.', after execution: '.$after;
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' execution complete'.PHP_EOL;
     if ($isMailSupported) {
-        sendEmail($result);
+        sendEmail($log);
     }
-    echo "OK", PHP_EOL;
 } catch (Exception $e) {
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' exception:'.$e->getMessage();
     if ($isMailSupported) {
-        sendEmail($e->getMessage());
+        sendEmail($log);
     }
+
     echo $e->getMessage(), PHP_EOL;
 } finally {
     $client->quit();
-    echo (new DateTime())->format('Y-m-d H:i:s').' execution completed', PHP_EOL;
+    echo $log;
 }
 
 function sendEmail($text)

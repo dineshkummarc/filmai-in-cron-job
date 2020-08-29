@@ -28,7 +28,9 @@ try {
     $before = $crawler->filter('.minPts')->parents()->first()->getText();
     $log = $log.(new DateTime())->format('Y-m-d H:i:s').' executing transfer pts JS (current pts: '.$before.')'.PHP_EOL;
     $client->executeScript('$(".transfer").click()');
-    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' execution complete'.PHP_EOL;
+    $crawler = $client->refreshCrawler();
+    $after = $crawler->filter('.upv.points')->getText();
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' execution complete (current pts: '.$after.')'.PHP_EOL;
     if ($isMailSupported) {
         sendEmail($log);
     }

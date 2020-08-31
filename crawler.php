@@ -18,7 +18,7 @@ $log = (new DateTime())->format('Y-m-d H:i:s').' execution started.'.PHP_EOL;
 $client = Client::createChromeClient();
 
 try {
-    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' sending GET request to '.$_ENV['LOGIN_URL'].PHP_EOL;
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' sending GET request to '.$_ENV['LOGIN_URL'].' '.PHP_EOL;
     $crawler = $client->request('GET', $_ENV['LOGIN_URL']);
 
     $form = $crawler->filter('.loginFrm')->form();

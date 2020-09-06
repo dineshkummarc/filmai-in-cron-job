@@ -39,6 +39,7 @@ try {
     $crawler = $client->refreshCrawler();
     $after = $crawler->filter('.upv.points')->getText();
     $log = $log.(new DateTime())->format('Y-m-d H:i:s').' execution complete (current pts: '.$after.')'.PHP_EOL;
+    $client->request('GET', $_ENV['LOGOUT_URL']);
 } catch (Exception $e) {
     $log = $log.(new DateTime())->format('Y-m-d H:i:s').' exception:'.$e->getMessage();
 } finally {

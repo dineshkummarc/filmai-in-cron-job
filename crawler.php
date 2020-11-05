@@ -21,7 +21,7 @@ try {
     $log = $log.(new DateTime())->format('Y-m-d H:i:s').' sending GET request to '.$_ENV['LOGIN_URL'].' '.PHP_EOL;
     $crawler = $client->request('GET', $_ENV['LOGIN_URL']);
 
-    $form = $crawler->filter('.loginFrm')->form();
+    $form = $crawler->filter('form')->form();
     $form->setValues(
         [
             'login' => $_ENV['LOGIN'],

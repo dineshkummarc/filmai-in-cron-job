@@ -20,8 +20,8 @@ $client = Client::createChromeClient();
 try {
     $log = $log.(new DateTime())->format('Y-m-d H:i:s').' sending GET request to '.$_ENV['LOGIN_URL'].' '.PHP_EOL;
     $crawler = $client->request('GET', $_ENV['LOGIN_URL']);
-
-    $form = $crawler->filter('form')->form();
+    sleep(5);
+    $form = $crawler->filter('#login_form')->form();
     $form->setValues(
         [
             'login' => $_ENV['LOGIN'],
@@ -41,7 +41,7 @@ try {
     $log = $log.(new DateTime())->format('Y-m-d H:i:s').' execution complete (current pts: '.$after.')'.PHP_EOL;
     $client->request('GET', $_ENV['LOGOUT_URL']);
 } catch (Exception $e) {
-    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' exception:'.$e->getMessage();
+    $log = $log.(new DateTime())->format('Y-m-d H:i:s').' exception:'.$e->getMessage().$e->getTraceAsString();
 } finally {
     $client->quit();
     echo $log;
